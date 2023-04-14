@@ -21,7 +21,7 @@ export const Header = () => {
     if (status === 'unavailable') {
       notify(
         <div className="flex flex-row items-center ">
-          <Image src="./metamask.svg" alt="metamask" width="50" height="50" />
+          <Image src="/metamask.svg" alt="metamask" width="50" height="50" />
           MetaMask not available :(
         </div>,
       );
@@ -33,7 +33,7 @@ export const Header = () => {
       <nav className="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
           <Link href="/" className="flex items-center">
-            <Image src="./logo.png" className="h-6 mr-3 sm:h-9" alt="Landwind Logo" />
+            <Image src="/logo.png" className="h-6 mr-3 sm:h-9" alt="Logo" />
           </Link>
           <div className="flex items-center lg:order-2">
             {isConnected ? (
@@ -44,7 +44,7 @@ export const Header = () => {
                 target="_blank"
                 className="flex flex-row text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
               >
-                <Image className="" src="./metamask.svg" alt="metamask" width="20" height="20" />
+                <Image className="" src="/metamask.svg" alt="metamask" width="20" height="20" />
                 Install Metamask
               </Link>
             ) : (
