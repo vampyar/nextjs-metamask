@@ -217,21 +217,21 @@ export function MetaMaskProvider(props: any) {
 
   const isConnected = status === 'connected';
   React.useEffect(() => {
-    if (!isConnected) return () => {};
+    if (!isConnected) return;
     const unsubscribe = subsribeToAccountsChanged(dispatch);
     return unsubscribe;
   }, [dispatch, isConnected]);
 
   const isAvailable = status !== 'unavailable' && status !== 'initializing';
   React.useEffect(() => {
-    if (!isAvailable) return () => {};
+    if (!isAvailable) return;
     const unsubscribe = subscribeToChainChanged(dispatch);
     return unsubscribe;
   }, [dispatch, isAvailable]);
 
   const isAvailableAndNotConnected = status === 'notConnected';
   React.useEffect(() => {
-    if (!isAvailableAndNotConnected) return () => {};
+    if (!isAvailableAndNotConnected) return;
     const unsubscribe = subscribeToManualConnection(dispatch);
     return unsubscribe;
   }, [dispatch, isAvailableAndNotConnected]);
