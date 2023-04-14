@@ -1,8 +1,33 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useMetaMask } from '@/hooks/useMetamask';
+import { notify } from '@/utils/notify';
+import { Profile } from '@/components/layout/profile';
+import Image from 'next/image';
 
 export const Header = () => {
   const [toolbar, setToolbar] = useState(false);
+
+  const { status, connect } = useMetaMask();
+
+  const isConnection = useMemo(() => status === 'connecting', [status]);
+  const isConnected = useMemo(() => status === 'connected', [status]);
+  const isNotInstalled = useMemo(() => status === 'unavailable', [status]);
+
+  useEffect(() => {
+    if (status === 'initializing') {
+      notify(<div>Synchronisation with MetaMask ongoing...</div>);
+    }
+    if (status === 'unavailable') {
+      notify(
+        <div className="flex flex-row items-center ">
+          <Image src="./metamask.svg" alt="metamask" width="50" height="50" />
+          MetaMask not available :(
+        </div>,
+      );
+    }
+  }, [status]);
+
   return (
     <header className="fixed w-full">
       <nav className="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
@@ -11,9 +36,26 @@ export const Header = () => {
             <img src="./logo.png" className="h-6 mr-3 sm:h-9" alt="Landwind Logo" />
           </a>
           <div className="flex items-center lg:order-2">
-            <a className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
-              Download
-            </a>
+            {isConnected ? (
+              <Profile />
+            ) : isNotInstalled ? (
+              <Link
+                href="https://metamask.io/"
+                target="_blank"
+                className="flex flex-row text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+              >
+                <Image className="" src="./metamask.svg" alt="metamask" width="20" height="20" />
+                Install Metamask
+              </Link>
+            ) : (
+              <button
+                className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+                onClick={connect}
+              >
+                {isConnection ? 'Connection...' : 'Connect to Wallet'}
+              </button>
+            )}
+
             <button
               type="button"
               className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -27,9 +69,9 @@ export const Header = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
               <svg
@@ -39,9 +81,9 @@ export const Header = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
             </button>
