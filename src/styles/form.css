@@ -1,0 +1,7 @@
+.btn {
+    @apply w-full px-4 py-2 font-bold text-white rounded-full hover:bg-gray-700 focus:outline-none;
+}
+
+.input {
+    @apply w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none
+}

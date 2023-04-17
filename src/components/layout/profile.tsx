@@ -5,10 +5,10 @@ export const Profile = () => {
   const { account, chainId, balance } = useConnectedMetaMask();
 
   return (
-    <div className="flex flex-col text-amber-50">
-      <div className="truncate max-md:w-60">Account: {account}</div>
+    <div className="flex flex-col text-gray-900">
+      <div className="truncate max-md:w-44">Account: {account}</div>
       <div>Chain ID: {chainId}</div>
-      <div>ETH: {formatEther(balance)}</div>
+      <div>Amount: {formatEther(balance)}</div>
     </div>
   );
 };
