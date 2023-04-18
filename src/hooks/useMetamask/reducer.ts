@@ -31,6 +31,10 @@ type ChainChanged = {
   type: 'metaMaskChainChanged';
   payload: string;
 };
+type BalanceChanged = {
+  type: 'metaMaskBalanceChanged';
+  payload: string;
+};
 
 export type Action =
   | MetaMaskUnavailable
@@ -39,7 +43,8 @@ export type Action =
   | MetaMaskConnecting
   | PermissionRejected
   | AccountsChanged
-  | ChainChanged;
+  | ChainChanged
+  | BalanceChanged;
 
 export function reducer(state: MetaMaskState, action: Action): MetaMaskState {
   switch (action.type) {
@@ -112,6 +117,15 @@ export function reducer(state: MetaMaskState, action: Action): MetaMaskState {
       return {
         ...state,
         chainId: action.payload,
+      };
+    case 'metaMaskBalanceChanged':
+      if (state.status === 'initializing' || state.status === 'unavailable') {
+        console.warn(`Invalid balance change in "${state.status}". Please, file an issue.`);
+        return state;
+      }
+      return {
+        ...state,
+        balance: action.payload,
       };
     // no default
   }

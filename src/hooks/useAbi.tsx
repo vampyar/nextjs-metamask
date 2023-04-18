@@ -48,7 +48,7 @@ export const useAbis = () => {
   };
 
   const tokenByChain = useMemo(
-    () => tokensList.filter((e) => chainId?.slice(2) === e.chainId.toString()),
+    () => tokensList.filter((e) => chainId && parseInt(chainId) === e.chainId),
     [chainId],
   );
 

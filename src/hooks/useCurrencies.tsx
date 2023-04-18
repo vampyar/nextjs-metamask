@@ -6,7 +6,7 @@ export const useCurrencies = () => {
   const { chainId } = useMetaMask();
 
   const currencies = useMemo(
-    () => tokens.filter((e) => chainId?.slice(2) === e.chainId.toString()),
+    () => tokens.filter((e) => chainId && parseInt(chainId) === e.chainId),
     [chainId],
   );
 

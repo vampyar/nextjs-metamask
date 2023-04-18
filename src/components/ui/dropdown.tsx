@@ -1,5 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 export interface IDropdownItem<T> {
@@ -8,16 +8,23 @@ export interface IDropdownItem<T> {
 }
 export interface IDropdownProps<T> {
   label: string;
+  value: T;
   options: IDropdownItem<T>[];
   onClick: (p: IDropdownItem<T>) => void;
 }
-export default function Dropdown<T>({ label, options, onClick }: IDropdownProps<T>) {
+export default function Dropdown<T>({ label, options, onClick, value }: IDropdownProps<T>) {
+  const handleOnClick = useCallback(
+    (props: IDropdownItem<T>) => {
+      onClick(props);
+    },
+    [options],
+  );
   const optionsMemo = useMemo(() => {
     return options?.map((props, index) => (
       <Menu.Item key={index}>
         {({ active }) => (
           <span
-            onClick={() => onClick(props)}
+            onClick={() => handleOnClick(props)}
             className={`${
               active ? 'bg-gray-900 text-white' : 'text-gray-900'
             } group flex w-full items-center rounded-md px-2 py-2 text-sm w-full`}
@@ -34,7 +41,7 @@ export default function Dropdown<T>({ label, options, onClick }: IDropdownProps<
       <Menu as="div" className="relative w-full">
         <div>
           <Menu.Button className="inline-flex w-full justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            {label}
+            {(value && `${value}`) || label}
             <ChevronDownIcon
               className="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100"
               aria-hidden="true"

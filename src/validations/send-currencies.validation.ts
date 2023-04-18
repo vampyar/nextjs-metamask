@@ -7,7 +7,8 @@ const sendCurrenciesSchema = z.object({
     .nonempty({
       message: 'The receiver is required',
     })
-    .min(42),
+    .min(42)
+    .toLowerCase(),
   currency: z.string().nonempty({
     message: 'The currency is required',
   }),

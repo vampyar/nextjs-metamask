@@ -30,7 +30,7 @@ const getTokenBalance = async (abis: IAbiItem[], account: string | null) => {
 
 const AssetsPage = () => {
   // Note: Temporary solution for but for it case it using JWT strategy
-  const { account, chainId } = useMetaMask();
+  const { account } = useMetaMask();
   const { push } = useRouter();
   useEffect(() => {
     if (!account) {
@@ -47,7 +47,7 @@ const AssetsPage = () => {
       console.log(result, '<<< result');
       setTokens(result);
     });
-  }, [abis, chainId, account]);
+  }, [abis]);
 
   const tokensMemo = useMemo(
     () =>

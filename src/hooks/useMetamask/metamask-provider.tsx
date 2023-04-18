@@ -107,10 +107,16 @@ function subsribeToAccountsChanged(dispatch: (action: Action) => void) {
   };
 }
 
-function subscribeToChainChanged(dispatch: (action: Action) => void) {
+function subscribeToChainChanged(dispatch: (action: Action) => void, state: MetaMaskState) {
   const ethereum = getSafeMetaMaskProvider();
-  const onChainChanged = (chainId: string) =>
+  const onChainChanged = async (chainId: string) => {
     dispatch({ type: 'metaMaskChainChanged', payload: chainId });
+    const balance: string = await ethereum.request({
+      method: 'eth_getBalance',
+      params: [state.account, 'latest'],
+    });
+    dispatch({ type: 'metaMaskBalanceChanged', payload: balance });
+  };
   ethereum.on('chainChanged', onChainChanged);
   return () => {
     ethereum.removeListener('chainChanged', onChainChanged);
@@ -200,6 +206,7 @@ const initialState: MetaMaskState = {
   status: 'initializing',
   account: null,
   chainId: null,
+  balance: null,
 };
 
 export function MetaMaskProvider(props: any) {
@@ -225,9 +232,9 @@ export function MetaMaskProvider(props: any) {
   const isAvailable = status !== 'unavailable' && status !== 'initializing';
   React.useEffect(() => {
     if (!isAvailable) return;
-    const unsubscribe = subscribeToChainChanged(dispatch);
+    const unsubscribe = subscribeToChainChanged(dispatch, state);
     return unsubscribe;
-  }, [dispatch, isAvailable]);
+  }, [dispatch, isAvailable, state.account]);
 
   const isAvailableAndNotConnected = status === 'notConnected';
   React.useEffect(() => {
@@ -272,12 +279,42 @@ export function MetaMaskProvider(props: any) {
     [isAvailable],
   );
 
+  const checkTransactionConfirmation = React.useCallback(
+    (txHash: string) => {
+      if (!isAvailable) {
+        console.warn(
+          '`switchChain` method has been called while MetaMask is not available or synchronising. Nothing will be done in this case.',
+        );
+        return Promise.resolve();
+      }
+      const checkTransactionLoop = () => {
+        const ethereum = getSafeMetaMaskProvider();
+        try {
+          return ethereum
+            .request({ method: 'eth_getTransactionReceipt', params: [txHash] })
+            .then((result: string | null) => {
+              if (result != null) return 'confirmed';
+              else return checkTransactionLoop();
+            });
+        } catch (err: unknown) {
+          if ('code' in (err as { [key: string]: any })) {
+            if ((err as ErrorWithCode).code === ERROR_CODE_REQUEST_PENDING) return;
+          }
+          throw err;
+        }
+      };
+      return checkTransactionLoop();
+    },
+    [isAvailable],
+  );
+
   const value: IMetaMaskContext = React.useMemo(
     () => ({
       ...state,
       connect,
       addChain,
       switchChain,
+      checkTransactionConfirmation,
       ethereum: isAvailable ? getSafeMetaMaskProvider() : null,
     }),
     [connect, addChain, switchChain, state, isAvailable],
