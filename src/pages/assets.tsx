@@ -44,7 +44,6 @@ const AssetsPage = () => {
 
   useEffect(() => {
     getTokenBalance(abis, account).then((result) => {
-      console.log(result, '<<< result');
       setTokens(result);
     });
   }, [abis]);

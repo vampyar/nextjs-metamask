@@ -18,9 +18,6 @@ export const SendCurrencies = () => {
     formState: { errors },
   } = useForm<TSendCurrencies>({
     resolver: sendCurrenciesResolver,
-    defaultValues: {
-      receiver: '0xdBf5Ae0A612641379bCC753393318f495c6d9d0f',
-    },
   });
 
   const currenciesMemo: IDropdownItem<string>[] = useMemo(
