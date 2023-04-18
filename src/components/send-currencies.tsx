@@ -58,6 +58,8 @@ export const SendCurrencies = () => {
     [account],
   );
 
+  const getError = (field: keyof TSendCurrencies) => errors[field]?.message || '';
+
   return (
     <form className="px-8 pt-6 pb-8 mb-4 w-auto md:w-96 " onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-center font-bold mb-">Send currency</h1>
@@ -73,8 +75,8 @@ export const SendCurrencies = () => {
           placeholder="receiver"
           {...register('receiver')}
         />
-        {errors.receiver?.message && (
-          <span className="text-red-500 text-xs italic">{errors.receiver?.message}</span>
+        {getError('receiver') && (
+          <span className="text-red-500 text-xs italic">{getError('receiver')}</span>
         )}
       </div>
       <div className="relative mb-4">
@@ -90,8 +92,8 @@ export const SendCurrencies = () => {
             />
           )}
         />
-        {errors.currency?.message && (
-          <span className="text-red-500 text-xs italic">{errors.currency?.message}</span>
+        {getError('currency') && (
+          <span className="text-red-500 text-xs italic">{getError('currency')}</span>
         )}
       </div>
       <div className="mb-4">
@@ -112,8 +114,8 @@ export const SendCurrencies = () => {
             />
           )}
         />
-        {errors.amount?.message && (
-          <span className="text-red-500 text-xs italic">{errors.amount?.message}</span>
+        {getError('amount') && (
+          <span className="text-red-500 text-xs italic">{getError('amount')}</span>
         )}
       </div>
       <div className="mb-6 text-center">
