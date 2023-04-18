@@ -3,7 +3,7 @@ import { sendCurrenciesResolver, TSendCurrencies } from '@/validations/send-curr
 import { useMetaMask } from '@/hooks/useMetamask';
 import Dropdown, { IDropdownItem } from '@/components/ui/dropdown';
 import { useCurrencies } from '@/hooks/useCurrencies';
-import { useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 import { notify } from '@/utils/notify';
 import { convertAmountToEther } from '@/utils/web3';
 
@@ -74,7 +74,9 @@ export const SendCurrencies = () => {
           {...register('receiver')}
         />
         {errors?.receiver && (
-          <span className="text-red-500 text-xs italic">{errors?.receiver?.message}</span>
+          <span className="text-red-500 text-xs italic">
+            {errors?.receiver?.message as ReactNode}
+          </span>
         )}
       </div>
       <div className="relative mb-4">
