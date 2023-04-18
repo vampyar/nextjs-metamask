@@ -58,7 +58,8 @@ export const SendCurrencies = () => {
     [account],
   );
 
-  const getError = (field: keyof TSendCurrencies) => errors[field]?.message || '';
+  const getError = (field: keyof TSendCurrencies) =>
+    (errors[field] && errors[field]?.message) || '';
 
   return (
     <form className="px-8 pt-6 pb-8 mb-4 w-auto md:w-96 " onSubmit={handleSubmit(onSubmit)}>
