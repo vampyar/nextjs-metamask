@@ -93,7 +93,9 @@ export const SendCurrencies = () => {
           )}
         />
         {errors?.currency && (
-          <span className="text-red-500 text-xs italic">{errors?.currency?.message}</span>
+          <span className="text-red-500 text-xs italic">
+            {errors?.currency?.message as ReactNode}
+          </span>
         )}
       </div>
       <div className="mb-4">
@@ -116,7 +118,9 @@ export const SendCurrencies = () => {
           )}
         />
         {errors?.amount && (
-          <span className="text-red-500 text-xs italic">{errors?.amount?.message}</span>
+          <span className="text-red-500 text-xs italic">
+            {errors?.amount?.message as ReactNode}
+          </span>
         )}
       </div>
       <div className="mb-6 text-center">
