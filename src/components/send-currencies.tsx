@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { sendCurrenciesResolver, TSendCurrencies } from '@/validations/send-currencies';
 import { useMetaMask } from '@/hooks/useMetamask';
 import { formatEther } from 'ethers';
@@ -7,6 +7,7 @@ import Dropdown, { IDropdownItem } from '@/components/ui/dropdown';
 export const SendCurrencies = () => {
   const { account } = useMetaMask();
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -50,9 +51,19 @@ export const SendCurrencies = () => {
         )}
       </div>
       <div className="relative mb-4">
-        <Dropdown label="Currency" options={currencies} onClick={(t) => console.log(t)} />
+        <Controller
+          control={control}
+          name="currency"
+          render={({ field: { onChange } }) => (
+            <Dropdown
+              label="Currency"
+              options={currencies}
+              onClick={(prop) => onChange(prop.value)}
+            />
+          )}
+        />
         {errors.currency?.message && (
-          <p className="text-red-500 text-xs italic">{errors.receiver?.message}</p>
+          <p className="text-red-500 text-xs italic">{errors.currency?.message}</p>
         )}
       </div>
       <div className="mb-4">
