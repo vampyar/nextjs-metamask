@@ -110,6 +110,7 @@ export const SendCurrencies = () => {
               id="amount"
               type="text"
               placeholder="amount"
+              value={field.value}
               onChange={(e) => field.onChange(Number(e.target.value))}
             />
           )}
