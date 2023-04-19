@@ -55,7 +55,7 @@ export type MetaMaskState =
   | MetaMaskConnected;
 
 export type IMetaMaskContext = MetaMaskState & {
-  isNetworkSupported: boolean;
+  isNetworkSupported?: boolean;
   /**
    * Connect the application to MetaMask
    * @returns Array of connected accounts when connection is successful, `null` if method not ready to be used
