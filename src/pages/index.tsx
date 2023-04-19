@@ -1,14 +1,29 @@
-import News, { INewsProps } from '@/components/news/news';
 import { getBaseUrl } from '@/utils/api';
 import { TNewsResponse } from '@/pages/api/news';
+import { Spinner } from '@/components/ui/spinner';
+import { Post } from '@/components/news/post';
+import { INewItem } from '@/types/intrefaces';
 
-export default function Home(props: INewsProps) {
-  return (
-    <>
-      <div className="flex">
-        <News {...props} />
+export interface INewsProps {
+  news: INewItem[];
+  message?: string;
+}
+
+export default function Home({ message, news }: INewsProps) {
+  if (!news.length) {
+    return (
+      <div>
+        <Spinner />
+        <h2>{message}</h2>
       </div>
-    </>
+    );
+  }
+  return (
+    <div className="grid md:grid-cols-4 gap-4 ">
+      {news.map((props, index) => (
+        <Post key={index} {...props} />
+      ))}
+    </div>
   );
 }
 
