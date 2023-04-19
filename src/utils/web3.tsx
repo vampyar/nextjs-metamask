@@ -5,8 +5,6 @@ export const web3utils = () => {
   return web3.utils;
 };
 
-export const convertAmountToEther = (amount: string): string => {
-  return web3utils().toWei(amount, 'ether');
+export const convertAmountToEther = (amount: number): string => {
+  return web3utils().toWei(amount.toString(), 'ether');
 };
-
-console.log(convertAmountToEther('0.02'));

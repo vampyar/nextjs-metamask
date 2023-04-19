@@ -34,7 +34,8 @@ export const SendCurrencies = () => {
         {
           from: account,
           to: data.receiver,
-          value: convertAmountToEther(data.amount.toString()),
+          // Note: for it case make sense found lib for working with float number type
+          value: convertAmountToEther(Number(data.amount)),
         },
       ];
       if (data.receiver === account) {
@@ -102,20 +103,18 @@ export const SendCurrencies = () => {
         <label className="block mb-2 text-sm font-bold text-gray-700 capitalize" htmlFor="to">
           amount
         </label>
-        <Controller
-          control={control}
-          name="amount"
-          render={({ field }) => (
-            <input
-              className="input focus:shadow-outline"
-              autoComplete="off"
-              id="amount"
-              type="text"
-              placeholder="amount"
-              value={field.value}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-            />
-          )}
+        <input
+          className="input focus:shadow-outline"
+          autoComplete="off"
+          id="amount"
+          type="text"
+          placeholder="amount"
+          {...register('amount', {
+            valueAsNumber: true,
+            onChange: (event) => {
+              return parseFloat(event.target.value);
+            },
+          })}
         />
         {errors?.amount && (
           <span className="text-red-500 text-xs italic">
