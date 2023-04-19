@@ -32,7 +32,7 @@ export const useAbis = () => {
     result: IAbiItem[] = [],
   ): Promise<IAbiItem[]> => {
     if (!tokens[index]) return Promise.resolve(result);
-    const response = await fetchAbi(tokens[index].address);
+    const response = await fetchAbi(tokens[index]?.address as string);
     let abi = undefined;
     // Note: rate limit from API
     if (index % 2) await delay(2000);
@@ -40,7 +40,7 @@ export const useAbis = () => {
       abi = JSON.parse(response.result);
     } catch (e) {}
     result.push({
-      ...tokens[index],
+      ...(tokens[index] as TToken),
       abi,
     });
 
