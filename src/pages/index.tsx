@@ -1,13 +1,9 @@
-import News, { INewsProps } from '@/components/news/news';
+// import News, { INewsProps } from '@/components/news/news';
 // import { getBaseUrl } from '@/utils/api';
 // import { TNewsResponse } from '@/pages/api/news';
 
-export default function Home(props: INewsProps) {
-  return (
-    <div className="flex">
-      <News {...props} />
-    </div>
-  );
+export default function Home() {
+  return <div className="flex">{/*<News {...props} />*/}</div>;
 }
 
 // export async function getStaticProps() {
