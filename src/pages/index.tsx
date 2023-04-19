@@ -1,15 +1,16 @@
 import { getBaseUrl } from '@/utils/api';
 import { TNewsResponse } from '@/pages/api/news';
+import { GetServerSideProps } from 'next';
+import { INewItem } from '@/types/intrefaces';
 import { Spinner } from '@/components/ui/spinner';
 import { Post } from '@/components/news/post';
-import { INewItem } from '@/types/intrefaces';
 
 export interface INewsProps {
   news: INewItem[];
   message?: string;
 }
 
-export default function Home({ message, news }: INewsProps) {
+const News = ({ news, message }: INewsProps) => {
   if (!news.length) {
     return (
       <div>
@@ -25,14 +26,25 @@ export default function Home({ message, news }: INewsProps) {
       ))}
     </div>
   );
+};
+
+export default function Home(props: INewsProps) {
+  return (
+    <>
+      <div className="flex">
+        <News {...props} />
+      </div>
+    </>
+  );
 }
 
-export async function getStaticProps() {
-  const res = await fetch(getBaseUrl() + '/api/news');
-  const news: TNewsResponse = await res.json();
-  if (news?.message) {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const client = await fetch(getBaseUrl() + '/api/news');
+  const news: TNewsResponse = await client.json();
+  if (news.message) {
     return {
       props: {
+        ...params,
         news: [],
         message: news.message,
       },
@@ -41,11 +53,8 @@ export async function getStaticProps() {
 
   return {
     props: {
-      news: news || [],
+      ...params,
+      news,
     },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 10, // In seconds
   };
-}
+};
