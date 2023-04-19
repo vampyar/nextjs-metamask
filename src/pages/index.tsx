@@ -10,25 +10,25 @@ export default function Home(props: INewsProps) {
   );
 }
 
-export async function getStaticProps() {
-  const res = await fetch(getBaseUrl() + '/api/news');
-  const news: TNewsResponse = await res.json();
-  if (news.message) {
-    return {
-      props: {
-        news: [],
-        message: news.message,
-      },
-    };
-  }
-
-  return {
-    props: {
-      news,
-    },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 10, // In seconds
-  };
-}
+// export async function getStaticProps() {
+//   const res = await fetch(getBaseUrl() + '/api/news');
+//   const news: TNewsResponse = await res.json();
+//   if (news.message) {
+//     return {
+//       props: {
+//         news: [],
+//         message: news.message,
+//       },
+//     };
+//   }
+//
+//   return {
+//     props: {
+//       news,
+//     },
+//     // Next.js will attempt to re-generate the page:
+//     // - When a request comes in
+//     // - At most once every 10 seconds
+//     revalidate: 10, // In seconds
+//   };
+// }
