@@ -4,11 +4,48 @@ import { useMetaMask } from '@/hooks/useMetamask';
 import { notify } from '@/utils/notify';
 import { Profile } from '@/components/layout/profile';
 import Image from 'next/image';
+import cls from 'classnames';
+
+const navigations = [
+  {
+    label: 'Assets',
+    href: '/assets',
+  },
+  {
+    label: 'Send Transaction',
+    href: '/send',
+  },
+];
+
+const Navigation = () => {
+  const { isNetworkSupported } = useMetaMask();
+
+  return (
+    <>
+      {navigations.map(({ href, label }, index) => (
+        <li key={index}>
+          <Link
+            href={!isNetworkSupported ? '#' : href}
+            className={cls([
+              'block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-900 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 text-gray-400 lg:hover:text-gray-400 ',
+              {
+                'cursor-not-allowed': !isNetworkSupported,
+              },
+            ])}
+            aria-disabled={true}
+          >
+            {label}
+          </Link>
+        </li>
+      ))}
+    </>
+  );
+};
 
 export const Header = () => {
   const [toolbar, setToolbar] = useState(false);
 
-  const { status, connect } = useMetaMask();
+  const { status, connect, isNetworkSupported } = useMetaMask();
 
   const isConnection = useMemo(() => status === 'connecting', [status]);
   const isConnected = useMemo(() => status === 'connected', [status]);
@@ -27,6 +64,17 @@ export const Header = () => {
       );
     }
   }, [status]);
+
+  useEffect(() => {
+    if (isNetworkSupported === false) {
+      notify(
+        <div className="flex flex-row items-center ">
+          <Image src="/metamask.svg" alt="metamask" width="50" height="50" />
+          Network not supported
+        </div>,
+      );
+    }
+  }, [isNetworkSupported]);
 
   return (
     <header className="w-full">
@@ -107,26 +155,7 @@ export const Header = () => {
                   News
                 </Link>
               </li>
-              {isConnected && (
-                <>
-                  <li>
-                    <Link
-                      href="/assets"
-                      className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-900 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 text-gray-400 lg:hover:text-gray-400"
-                    >
-                      Assets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/send"
-                      className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-900 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 text-gray-400 lg:hover:text-gray-400"
-                    >
-                      Send Transaction
-                    </Link>
-                  </li>
-                </>
-              )}
+              {isConnected && <Navigation />}
             </ul>
           </div>
         </div>

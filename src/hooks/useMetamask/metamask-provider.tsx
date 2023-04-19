@@ -7,6 +7,7 @@ import {
 } from './metamask-context';
 import { Action, reducer } from './reducer';
 import { useSafeDispatch } from '../useSafeDispatch';
+import { isSupportNetworks } from '@/utils/web3';
 
 type ErrorWithCode = {
   code: number;
@@ -51,6 +52,7 @@ async function synchronize(dispatch: (action: Action) => void) {
   const chainId: string = await ethereum.request({
     method: 'eth_chainId',
   });
+  dispatch({ type: 'metaMaskNetworkNotSupported', payload: isSupportNetworks(chainId) });
 
   const accessibleAccounts: string[] = await ethereum.request({
     method: 'eth_accounts',
@@ -78,6 +80,7 @@ function subscribeToManualConnection(dispatch: (action: Action) => void) {
     const chainId: string = await ethereum.request({
       method: 'eth_chainId',
     });
+    dispatch({ type: 'metaMaskNetworkNotSupported', payload: isSupportNetworks(chainId) });
     const balance: string = await ethereum.request({
       method: 'eth_getBalance',
       params: [accounts[0], 'latest'],
@@ -110,6 +113,7 @@ function subsribeToAccountsChanged(dispatch: (action: Action) => void) {
 function subscribeToChainChanged(dispatch: (action: Action) => void, state: MetaMaskState) {
   const ethereum = getSafeMetaMaskProvider();
   const onChainChanged = async (chainId: string) => {
+    dispatch({ type: 'metaMaskNetworkNotSupported', payload: isSupportNetworks(chainId) });
     dispatch({ type: 'metaMaskChainChanged', payload: chainId });
     const balance: string = await ethereum.request({
       method: 'eth_getBalance',
@@ -138,6 +142,7 @@ function requestAccounts(dispatch: (action: Action) => void): Promise<string[]> 
       const chainId: string = await ethereum.request({
         method: 'eth_chainId',
       });
+      dispatch({ type: 'metaMaskNetworkNotSupported', payload: isSupportNetworks(chainId) });
       const balance: string = await ethereum.request({
         method: 'eth_getBalance',
         params: [accounts[0], 'latest'],
@@ -207,6 +212,7 @@ const initialState: MetaMaskState = {
   account: null,
   chainId: null,
   balance: null,
+  isNetworkSupported: true,
 };
 
 export function MetaMaskProvider(props: any) {

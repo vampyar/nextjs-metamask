@@ -14,6 +14,7 @@ export type AddEthereumChainParameter = {
 };
 
 type MetaMaskInitializing = {
+  isNetworkSupported: true;
   account: null;
   chainId: null;
   balance: null;
@@ -39,6 +40,7 @@ type MetaMaskConnecting = {
 };
 
 type MetaMaskConnected = {
+  isNetworkSupported: boolean;
   account: string;
   chainId: string;
   balance: string;
@@ -53,6 +55,7 @@ export type MetaMaskState =
   | MetaMaskConnected;
 
 export type IMetaMaskContext = MetaMaskState & {
+  isNetworkSupported: boolean;
   /**
    * Connect the application to MetaMask
    * @returns Array of connected accounts when connection is successful, `null` if method not ready to be used

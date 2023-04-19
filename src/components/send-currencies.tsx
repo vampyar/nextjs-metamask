@@ -8,7 +8,7 @@ import { notify } from '@/utils/notify';
 import { convertAmountToEther } from '@/utils/web3';
 
 export const SendCurrencies = () => {
-  const { account, ethereum, checkTransactionConfirmation } = useMetaMask();
+  const { account, ethereum, checkTransactionConfirmation, isNetworkSupported } = useMetaMask();
   const { currencies } = useCurrencies();
   const {
     reset,
@@ -30,6 +30,7 @@ export const SendCurrencies = () => {
   );
   const onSubmit = useCallback(
     async (data: TSendCurrencies) => {
+      if (!isNetworkSupported) return;
       const params = [
         {
           from: account,
@@ -56,7 +57,7 @@ export const SendCurrencies = () => {
         notify(error?.message);
       }
     },
-    [account],
+    [account, isNetworkSupported],
   );
 
   return (
@@ -123,7 +124,11 @@ export const SendCurrencies = () => {
         )}
       </div>
       <div className="mb-6 text-center">
-        <button className="btn bg-gray-900 focus:shadow-outline" type="submit">
+        <button
+          className="btn bg-gray-900 focus:shadow-outline"
+          disabled={!isNetworkSupported}
+          type="submit"
+        >
           Send
         </button>
       </div>

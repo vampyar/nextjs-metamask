@@ -3,6 +3,10 @@ import { MetaMaskState } from './metamask-context';
 type MetaMaskUnavailable = {
   type: 'metaMaskUnavailable';
 };
+type MetaMaskNetworkNotSupported = {
+  type: 'metaMaskNetworkNotSupported';
+  payload: boolean;
+};
 type MetaMaskNotConnected = {
   type: 'metaMaskNotConnected';
   payload: {
@@ -39,6 +43,7 @@ type BalanceChanged = {
 export type Action =
   | MetaMaskUnavailable
   | MetaMaskNotConnected
+  | MetaMaskNetworkNotSupported
   | MetaMaskConnected
   | MetaMaskConnecting
   | PermissionRejected
@@ -127,6 +132,12 @@ export function reducer(state: MetaMaskState, action: Action): MetaMaskState {
         ...state,
         balance: action.payload,
       };
+    case 'metaMaskNetworkNotSupported': {
+      return {
+        ...state,
+        isNetworkSupported: action.payload,
+      };
+    }
     // no default
   }
 }
