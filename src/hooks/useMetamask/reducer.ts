@@ -55,22 +55,25 @@ export function reducer(state: MetaMaskState, action: Action): MetaMaskState {
   switch (action.type) {
     case 'metaMaskUnavailable':
       return {
+        ...state,
         chainId: null,
         account: null,
         status: 'unavailable',
       };
     case 'metaMaskNotConnected':
       return {
+        ...state,
         chainId: action.payload.chainId,
         account: null,
         status: 'notConnected',
       };
     case 'metaMaskConnected':
-      const unlockedAccounts = action.payload.accounts;
+      const unlockedAccounts = action.payload?.accounts;
       return {
         chainId: action.payload.chainId,
         balance: action.payload.balance,
-        account: unlockedAccounts[0],
+        account: unlockedAccounts[0] || '',
+        isNetworkSupported: true,
         status: 'connected',
       };
     case 'metaMaskConnecting':
@@ -112,7 +115,7 @@ export function reducer(state: MetaMaskState, action: Action): MetaMaskState {
       }
       return {
         ...state,
-        account: accounts[0],
+        account: accounts[0] as string,
       };
     case 'metaMaskChainChanged':
       if (state.status === 'initializing' || state.status === 'unavailable') {

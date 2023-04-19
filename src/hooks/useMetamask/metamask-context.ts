@@ -14,7 +14,7 @@ export type AddEthereumChainParameter = {
 };
 
 type MetaMaskInitializing = {
-  isNetworkSupported: true;
+  isNetworkSupported: boolean;
   account: null;
   chainId: null;
   balance: null;
@@ -22,18 +22,21 @@ type MetaMaskInitializing = {
 };
 
 type MetaMaskUnavailable = {
+  isNetworkSupported: boolean;
   account: null;
   chainId: null;
   status: 'unavailable';
 };
 
 type MetaMaskNotConnected = {
+  isNetworkSupported: boolean;
   account: null;
   chainId: string;
   status: 'notConnected';
 };
 
 type MetaMaskConnecting = {
+  isNetworkSupported: boolean;
   account: null;
   chainId: string;
   status: 'connecting';
