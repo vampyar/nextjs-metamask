@@ -1,6 +1,6 @@
 import News, { INewsProps } from '@/components/news/news';
-import { getBaseUrl } from '@/utils/api';
-import { TNewsResponse } from '@/pages/api/news';
+// import { getBaseUrl } from '@/utils/api';
+// import { TNewsResponse } from '@/pages/api/news';
 
 export default function Home(props: INewsProps) {
   return (
