@@ -1,20 +1,21 @@
-import News from '@/components/news';
+import News, { INewsProps } from '@/components/news/news';
+import { getBaseUrl } from '@/utils/api';
 
-export default function Home() {
+export default function Home({ news }: INewsProps) {
   return (
-    <main className="flex h-screen flex-col items-center justify-between p-24">
-      <News />
-    </main>
+    <div className="flex">
+      <News news={news} />
+    </div>
   );
 }
 
 export async function getStaticProps() {
-  const res = await fetch('/api/news');
-  const posts = await res.json();
+  const res = await fetch(getBaseUrl() + '/api/news');
+  const news = await res.json();
 
   return {
     props: {
-      posts,
+      news,
     },
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
