@@ -4,8 +4,10 @@ import { INewItem } from '@/types/intrefaces';
 
 export const revalidate = 60 * 60;
 
+export type TNewsResponse = INewItem[] & { message?: string };
+
 // TODO Note: It's method need cover authenticate flow for protections API
-export default async function GET(req: NextApiRequest, res: NextApiResponse<INewItem[]>) {
+export default async function GET(req: NextApiRequest, res: NextApiResponse<TNewsResponse>) {
   const client = await fetch('https://crypto-news16.p.rapidapi.com/news/top/20', {
     headers: {
       'X-RapidAPI-Key': env.RAPID_API_KEY,
